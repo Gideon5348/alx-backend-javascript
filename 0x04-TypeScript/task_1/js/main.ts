@@ -1,51 +1,51 @@
-interface Teacher {
+export interface Teacher {
   readonly firstName: string;
   readonly lastName: string;
   fullTimeEmployee: boolean;
   yearsOfExperience?: number;
   location: string;
-  [propName: string]: any;
+  [index:string]: any;
 }
 
-interface Directors extends Teacher {
+export interface Directors extends Teacher {
   numberOfReports: number;
 }
 
-interface printTeacherFunction {
+export interface printTeacherFunction {
   (firstName: string, lastName: string): string;
 }
 
-const printTeacher: printTeacherFunction = (firstName, lastName) => {
-  return `${firstName.charAt(0)}. ${lastName}`;
-};
+export function printTeacher(firstName: string, lastName: string): string {
+  return `${firstName[0]}. ${lastName}`;
+}
 
-const teacher1: Teacher = {
-  firstName: 'John',
-  lastName: 'Doe',
-  fullTimeEmployee: true,
-  location: 'New York',
-  contract: true,
-};
+export interface IStudentClassConstructor {
+  new (firstName: string, lastName: string): IStudentClass;
+}
 
-const teacher2: Teacher = {
-  firstName: 'Jane',
-  lastName: 'Smith',
-  fullTimeEmployee: false,
-  location: 'Los Angeles',
-  yearsOfExperience: 5,
-  contract: false,
-};
+export interface IStudentClass {
+  workOnHomework(): string;
+  displayName(): string;
+}
 
-const director1: Directors = {
-  firstName: 'John',
-  lastName: 'Doe',
-  location: 'London',
-  fullTimeEmployee: true,
-  numberOfReports: 17,
-};
+export class StudentClass implements IStudentClass {
+  private _firstName!: string;
+  private _lastName!: string;
 
-console.log(teacher1);
-console.log(teacher2);
-console.log(director1);
+  constructor(firstName: string, lastName: string) {
+    this._firstName = firstName;
+    this._lastName = lastName;
+  }
 
-console.log(printTeacher('John', 'Doe'));
+  workOnHomework() {
+    return 'Currently working';
+  }
+
+  displayName() {
+    return this._firstName;
+  }
+}
+
+export function createStudent(ctor: IStudentClassConstructor, firstName: string, lastName: string): IStudentClass {
+  return new ctor(firstName, lastName);
+}
